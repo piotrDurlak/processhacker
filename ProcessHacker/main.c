@@ -172,7 +172,7 @@ INT WINAPI wWinMain(
         !PhIsExecutingInWow64()
         )
     {
-        PhInitializeKph();
+       // PhInitializeKph();
     }
 
 #ifdef DEBUG
