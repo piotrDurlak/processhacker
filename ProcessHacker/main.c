@@ -99,7 +99,6 @@ PPH_STRING PhSettingsFileName = NULL;
 PH_STARTUP_PARAMETERS PhStartupParameters;
 
 PH_PROVIDER_THREAD PhPrimaryProviderThread;
-PH_PROVIDER_THREAD PhSecondaryProviderThread;
 PH_PROVIDER_THREAD PhTertiaryProviderThread;
 
 static PPH_LIST DialogList = NULL;

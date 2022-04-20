@@ -381,18 +381,18 @@ VOID PhMwpInitializeProviders(
     // See PhMwpLoadStage1Worker for more details.
 
     PhInitializeProviderThread(&PhPrimaryProviderThread, PhCsUpdateInterval);
-    PhInitializeProviderThread(&PhSecondaryProviderThread, PhCsUpdateInterval);
+
     PhInitializeProviderThread(&PhTertiaryProviderThread, PhCsUpdateInterval);
 
     PhRegisterProvider(&PhPrimaryProviderThread, PhProcessProviderUpdate, NULL, &PhMwpProcessProviderRegistration);
-    PhRegisterProvider(&PhSecondaryProviderThread, PhServiceProviderUpdate, NULL, &PhMwpServiceProviderRegistration);
-    PhRegisterProvider(&PhPrimaryProviderThread, PhNetworkProviderUpdate, NULL, &PhMwpNetworkProviderRegistration);
+
+
 
     PhSetEnabledProvider(&PhMwpProcessProviderRegistration, TRUE);
-    PhSetEnabledProvider(&PhMwpServiceProviderRegistration, TRUE);
+
 
     PhStartProviderThread(&PhPrimaryProviderThread);
-    PhStartProviderThread(&PhSecondaryProviderThread);
+
     PhStartProviderThread(&PhTertiaryProviderThread);
 }
 
@@ -401,7 +401,6 @@ VOID PhMwpApplyUpdateInterval(
     )
 {
     PhSetIntervalProviderThread(&PhPrimaryProviderThread, Interval);
-    PhSetIntervalProviderThread(&PhSecondaryProviderThread, Interval);
     PhSetIntervalProviderThread(&PhTertiaryProviderThread, Interval);
 }
 

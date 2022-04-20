@@ -242,69 +242,6 @@ PPH_STRING PhpGetPluginDirectoryPath(
     return pluginsDirectory;
 }
 
-//PPH_STRING PhpGetPluginDirectoryPath(
-//    VOID
-//    )
-//{
-//    static PPH_STRING cachedPluginDirectory = NULL;
-//    PPH_STRING pluginsDirectory;
-//    SIZE_T returnLength;
-//    WCHAR pluginsDirectoryName[MAX_PATH];
-//    PH_FORMAT format[3];
-//
-//    if (pluginsDirectory = InterlockedCompareExchangePointer(
-//        &cachedPluginDirectory,
-//        NULL,
-//        NULL
-//        ))
-//    {
-//        return PhReferenceObject(pluginsDirectory);
-//    }
-//
-//    pluginsDirectory = PhGetStringSetting(L"PluginsDirectory");
-//
-//    if (RtlDetermineDosPathNameType_U(pluginsDirectory->Buffer) == RtlPathTypeRelative)
-//    {
-//        PPH_STRING applicationDirectory;
-//
-//        if (applicationDirectory = PhGetApplicationDirectory())
-//        {
-//            PH_STRINGREF pluginsDirectoryNameSr;
-//
-//            // Not absolute. Make sure it is.
-//            PhInitFormatSR(&format[0], applicationDirectory->sr);
-//            PhInitFormatSR(&format[1], pluginsDirectory->sr);
-//            PhInitFormatC(&format[2], OBJ_NAME_PATH_SEPARATOR);
-//
-//            if (PhFormatToBuffer(
-//                format,
-//                RTL_NUMBER_OF(format),
-//                pluginsDirectoryName,
-//                sizeof(pluginsDirectoryName),
-//                &returnLength
-//                ))
-//            {
-//                pluginsDirectoryNameSr.Buffer = pluginsDirectoryName;
-//                pluginsDirectoryNameSr.Length = returnLength - sizeof(UNICODE_NULL);
-//
-//                PhMoveReference(&pluginsDirectory, PhCreateString2(&pluginsDirectoryNameSr));
-//            }
-//
-//            PhDereferenceObject(applicationDirectory);
-//        }
-//    }
-//
-//    if (!InterlockedCompareExchangePointer(
-//        &cachedPluginDirectory,
-//        pluginsDirectory,
-//        NULL
-//        ))
-//    {
-//        PhReferenceObject(pluginsDirectory);
-//    }
-//
-//    return pluginsDirectory;
-//}
 
 
 
