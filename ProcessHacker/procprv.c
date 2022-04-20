@@ -2347,6 +2347,9 @@ VOID PhProcessProviderUpdate(
             processItem->CpuKernelUsage = kernelCpuUsage;
             processItem->CpuUserUsage = userCpuUsage;
 
+            //kyp.CpuUsage_Kyp= processItem->CpuUsage;
+
+            //PhInitializeStringRefLongHint(&testForSID, processItem->ProcessIdString);
             PhAddItemCircularBuffer_FLOAT(&processItem->CpuKernelHistory, kernelCpuUsage);
             PhAddItemCircularBuffer_FLOAT(&processItem->CpuUserHistory, userCpuUsage);
 
@@ -2365,6 +2368,12 @@ VOID PhProcessProviderUpdate(
                 {
                     maxIoValue = processItem->IoReadDelta.Delta + processItem->IoWriteDelta.Delta;
                     maxIoProcessItem = processItem;
+                    //kyp.IOTotal_Kyp = maxIoValue;
+                    //kyp.Sid_Kyp = HandleToUlong(processItem->ProcessId);
+                    //kyp.processName_Kyp;
+                    //VmCounters
+                    //kyp.Memory_Kyp = HandleToUlong(processItem->VmCounters.PagefileUsage); ;
+                    //kyp.processName_Kyp =HandleToUlong(ProcessItem->ProcessId)
                 }
             }
 
@@ -2686,7 +2695,13 @@ VOID PhProcessProviderUpdate(
 
     PhInvokeCallback(PhGetGeneralCallback(GeneralCallbackProcessProviderUpdatedEvent), NULL);
     runCount++;
+
 }
+
+//VOID kypTest() {
+//    PH_PROCESS_ITEM_KYP kyp;
+//
+//}
 
 PPH_PROCESS_RECORD PhpCreateProcessRecord(
     _In_ PPH_PROCESS_ITEM ProcessItem

@@ -96,6 +96,15 @@ typedef struct _PH_IMAGELIST_ITEM
     ULONG SmallIconIndex;
 } PH_IMAGELIST_ITEM, *PPH_IMAGELIST_ITEM;
 
+typedef struct _PH_PROCESS_ITEM_KYP {
+    ULONG Sid_Kyp;
+    STRING processName_Kyp;
+    ULONG64 IOTotal_Kyp;
+    FLOAT CpuUsage_Kyp;
+    ULONG64 Memory_Kyp;
+
+} PH_PROCESS_ITEM_KYP, *PPH_PROCESS_ITEM_KYP;
+
 typedef struct _PH_PROCESS_ITEM
 {
     PH_HASH_ENTRY HashEntry;

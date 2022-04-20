@@ -202,10 +202,6 @@ INT WINAPI wWinMain(
         PhExitApplication(STATUS_SUCCESS);
     }
 
-    if (PhPluginsEnabled && !PhStartupParameters.NoPlugins)
-    {
-        PhLoadPlugins();
-    }
 
     PhInitializeMitigationSignaturePolicy();
 

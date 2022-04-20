@@ -138,106 +138,9 @@ VOID PhInitializeProcessTreeList(
     PhAddTreeNewColumnEx(hwnd, PHPRTLC_CPU, TRUE, L"CPU", 45, PH_ALIGN_RIGHT, 1, DT_RIGHT, TRUE);
     PhAddTreeNewColumnEx(hwnd, PHPRTLC_IOTOTALRATE, TRUE, L"I/O total rate", 70, PH_ALIGN_RIGHT, 2, DT_RIGHT, TRUE);
     PhAddTreeNewColumnEx(hwnd, PHPRTLC_PRIVATEBYTES, TRUE, L"Private bytes", 70, PH_ALIGN_RIGHT, 3, DT_RIGHT, TRUE);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_USERNAME, TRUE, L"User name", 140, PH_ALIGN_LEFT, 4, DT_PATH_ELLIPSIS);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_DESCRIPTION, TRUE, L"Description", 180, PH_ALIGN_LEFT, 5, 0);
 
-    // Customizable columns (1)
-    PhAddTreeNewColumn(hwnd, PHPRTLC_COMPANYNAME, FALSE, L"Company name", 180, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_VERSION, FALSE, L"Version", 100, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_FILENAME, FALSE, L"File name", 180, PH_ALIGN_LEFT, ULONG_MAX, DT_PATH_ELLIPSIS);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_COMMANDLINE, FALSE, L"Command line", 180, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PEAKPRIVATEBYTES, FALSE, L"Peak private bytes", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_WORKINGSET, FALSE, L"Working set", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PEAKWORKINGSET, FALSE, L"Peak working set", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PRIVATEWS, FALSE, L"Private WS", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_SHAREDWS, FALSE, L"Shared WS", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_SHAREABLEWS, FALSE, L"Shareable WS", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_VIRTUALSIZE, FALSE, L"Virtual size", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PEAKVIRTUALSIZE, FALSE, L"Peak virtual size", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PAGEFAULTS, FALSE, L"Page faults", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_SESSIONID, FALSE, L"Session ID", 45, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PRIORITYCLASS, FALSE, L"Priority class", 100, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_BASEPRIORITY, FALSE, L"Base priority", 45, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
 
-    // Customizable columns (2)
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_THREADS, FALSE, L"Threads", 45, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_HANDLES, FALSE, L"Handles", 45, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_GDIHANDLES, FALSE, L"GDI handles", 45, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_USERHANDLES, FALSE, L"USER handles", 45, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IORORATE, FALSE, L"I/O read+other rate", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IOWRATE, FALSE, L"I/O write rate", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_INTEGRITY, FALSE, L"Integrity", 100, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IOPRIORITY, FALSE, L"I/O priority", 70, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PAGEPRIORITY, FALSE, L"Page priority", 45, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_STARTTIME, FALSE, L"Start time", 100, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_TOTALCPUTIME, FALSE, L"Total CPU time", 90, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_KERNELCPUTIME, FALSE, L"Kernel CPU time", 90, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_USERCPUTIME, FALSE, L"User CPU time", 90, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_VERIFICATIONSTATUS, FALSE, L"Verification status", 70, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_VERIFIEDSIGNER, FALSE, L"Verified signer", 100, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_ASLR, FALSE, L"ASLR", 50, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_RELATIVESTARTTIME, FALSE, L"Relative start time", 180, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_BITS, FALSE, L"Bits", 50, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_ELEVATION, FALSE, L"Elevation", 60, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_WINDOWTITLE, FALSE, L"Window title", 120, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_WINDOWSTATUS, FALSE, L"Window status", 60, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_CYCLES, FALSE, L"Cycles", 110, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_CYCLESDELTA, FALSE, L"Cycles delta", 90, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx2(hwnd, PHPRTLC_CPUHISTORY, FALSE, L"CPU history", 100, PH_ALIGN_LEFT, ULONG_MAX, 0, TN_COLUMN_FLAG_CUSTOMDRAW | TN_COLUMN_FLAG_SORTDESCENDING);
-    PhAddTreeNewColumnEx2(hwnd, PHPRTLC_PRIVATEBYTESHISTORY, FALSE, L"Private bytes history", 100, PH_ALIGN_LEFT, ULONG_MAX, 0, TN_COLUMN_FLAG_CUSTOMDRAW | TN_COLUMN_FLAG_SORTDESCENDING);
-    PhAddTreeNewColumnEx2(hwnd, PHPRTLC_IOHISTORY, FALSE, L"I/O history", 100, PH_ALIGN_LEFT, ULONG_MAX, 0, TN_COLUMN_FLAG_CUSTOMDRAW | TN_COLUMN_FLAG_SORTDESCENDING);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_DEP, FALSE, L"DEP", 100, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_VIRTUALIZED, FALSE, L"Virtualized", 80, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_CONTEXTSWITCHES, FALSE, L"Context switches", 100, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_CONTEXTSWITCHESDELTA, FALSE, L"Context switches delta", 80, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PAGEFAULTSDELTA, FALSE, L"Page faults delta", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
 
-    // I/O group columns
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IOREADS, FALSE, L"I/O reads", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IOWRITES, FALSE, L"I/O writes", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IOOTHER, FALSE, L"I/O other", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IOREADBYTES, FALSE, L"I/O read bytes", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IOWRITEBYTES, FALSE, L"I/O write bytes", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IOOTHERBYTES, FALSE, L"I/O other bytes", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IOREADSDELTA, FALSE, L"I/O reads delta", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IOWRITESDELTA, FALSE, L"I/O writes delta", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IOOTHERDELTA, FALSE, L"I/O other delta", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-
-    // Customizable columns (3)
-    PhAddTreeNewColumn(hwnd, PHPRTLC_OSCONTEXT, FALSE, L"OS context", 100, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PAGEDPOOL, FALSE, L"Paged pool", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PEAKPAGEDPOOL, FALSE, L"Peak paged pool", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_NONPAGEDPOOL, FALSE, L"Non-paged pool", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PEAKNONPAGEDPOOL, FALSE, L"Peak non-paged pool", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_MINIMUMWORKINGSET, FALSE, L"Minimum working set", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_MAXIMUMWORKINGSET, FALSE, L"Maximum working set", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PRIVATEBYTESDELTA, FALSE, L"Private bytes delta", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_SUBSYSTEM, FALSE, L"Subsystem", 110, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_PACKAGENAME, FALSE, L"Package name", 160, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_APPID, FALSE, L"App ID", 160, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_DPIAWARENESS, FALSE, L"DPI awareness", 110, PH_ALIGN_LEFT, ULONG_MAX, 0);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_CFGUARD, FALSE, L"CF Guard", 70, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_TIMESTAMP, FALSE, L"Time stamp", 140, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_FILEMODIFIEDTIME, FALSE, L"File modified time", 140, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_FILESIZE, FALSE, L"File size", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_SUBPROCESSCOUNT, FALSE, L"Subprocesses", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_JOBOBJECTID, FALSE, L"Job Object ID", 50, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PROTECTION, FALSE, L"Protection", 105, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_DESKTOP, FALSE, L"Desktop", 80, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_CRITICAL, FALSE, L"Critical", 80, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PIDHEX, FALSE, L"PID (Hex)", 50, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_CPUCORECYCLES, FALSE, L"CPU (relative)", 45, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_CET, FALSE, L"CET", 45, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_IMAGE_COHERENCY, FALSE, L"Image coherency", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_ERRORMODE, FALSE, L"Error mode", 70, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_CODEPAGE, FALSE, L"Code page", 70, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx2(hwnd, PHPRTLC_TIMELINE, FALSE, L"Timeline", 100, PH_ALIGN_LEFT, ULONG_MAX, 0, TN_COLUMN_FLAG_CUSTOMDRAW | TN_COLUMN_FLAG_SORTDESCENDING);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_POWERTHROTTLING, FALSE, L"Power throttling", 70, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_ARCHITECTURE, FALSE, L"Architecture", 70, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_PARENTPID, FALSE, L"Parent PID", 50, PH_ALIGN_RIGHT, 0, DT_RIGHT);
-    PhAddTreeNewColumn(hwnd, PHPRTLC_PARENTCONSOLEPID, FALSE, L"Parent console PID", 50, PH_ALIGN_RIGHT, 0, DT_RIGHT);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_COMMITSIZE, FALSE, L"Shared commit", 70, PH_ALIGN_RIGHT, ULONG_MAX, DT_RIGHT, TRUE);
-    PhAddTreeNewColumnEx(hwnd, PHPRTLC_PRIORITYBOOST, FALSE, L"Priority boost", 45, PH_ALIGN_LEFT, ULONG_MAX, 0, TRUE);
 
     TreeNew_SetRedraw(hwnd, TRUE);
 
@@ -371,7 +274,7 @@ PPH_PROCESS_NODE PhAddProcessNode(
     )
 {
     PPH_PROCESS_NODE processNode;
-    PPH_PROCESS_NODE parentNode;
+   // PPH_PROCESS_NODE parentNode;
     ULONG i;
 
     processNode = PhAllocate(PhEmGetObjectSize(EmProcessNodeType, sizeof(PH_PROCESS_NODE)));
@@ -399,22 +302,22 @@ PPH_PROCESS_NODE PhAddProcessNode(
     processNode->Node.TextCacheSize = PHPRTLC_MAXIMUM;
 
     processNode->Children = PhCreateList(1);
-
+    //pdur
     // Find this process' parent and add the process to it if we found it.
-    if (
-        (parentNode = PhFindProcessNode(ProcessItem->ParentProcessId)) &&
-        PhpValidateParentProcessNode(processNode, parentNode)
-        )
-    {
-        PhAddItemList(parentNode->Children, processNode);
-        processNode->Parent = parentNode;
-    }
-    else
-    {
+    //if (
+    //    (parentNode = PhFindProcessNode(ProcessItem->ParentProcessId)) &&
+    //    PhpValidateParentProcessNode(processNode, parentNode)
+    //    )
+    //{
+    //    PhAddItemList(parentNode->Children, processNode);
+    //    processNode->Parent = parentNode;
+    //}
+    //else
+    //{
         // No parent, add to root list.
         processNode->Parent = NULL;
         PhAddItemList(ProcessNodeRootList, processNode);
-    }
+    //}
 
     // Find this process' children and move them to this node.
 

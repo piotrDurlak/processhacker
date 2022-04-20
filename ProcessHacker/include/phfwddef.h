@@ -20,6 +20,7 @@ typedef struct _PH_HANDLE_ITEM *PPH_HANDLE_ITEM;
 typedef struct _PH_HANDLE_PROVIDER *PPH_HANDLE_PROVIDER;
 typedef struct _PH_MEMORY_ITEM *PPH_MEMORY_ITEM;
 typedef struct _PH_MEMORY_ITEM_LIST *PPH_MEMORY_ITEM_LIST;
+typedef struct _PH_PROCESS_ITEM_KYP *PPH_PROCESS_ITEM_KYP;
 
 // uimodels
 

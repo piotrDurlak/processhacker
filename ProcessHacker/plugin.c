@@ -61,20 +61,7 @@ VOID PhpExecuteCallbackForAllPlugins(
 PH_AVL_TREE PhPluginsByName = PH_AVL_TREE_INIT(PhpPluginsCompareFunction);
 static PH_CALLBACK GeneralCallbacks[GeneralCallbackMaximum];
 static ULONG NextPluginId = IDPLUGINS + 1;
-static PH_STRINGREF PhpDefaultPluginName[] =
-{
-    PH_STRINGREF_INIT(L"DotNetTools.dll"),
-    PH_STRINGREF_INIT(L"ExtendedNotifications.dll"),
-    PH_STRINGREF_INIT(L"ExtendedServices.dll"),
-    PH_STRINGREF_INIT(L"ExtendedTools.dll"),
-    PH_STRINGREF_INIT(L"HardwareDevices.dll"),
-    PH_STRINGREF_INIT(L"NetworkTools.dll"),
-    PH_STRINGREF_INIT(L"OnlineChecks.dll"),
-    PH_STRINGREF_INIT(L"ToolStatus.dll"),
-    PH_STRINGREF_INIT(L"Updater.dll"),
-    PH_STRINGREF_INIT(L"UserNotes.dll"),
-    PH_STRINGREF_INIT(L"WindowExplorer.dll"),
-};
+
 
 INT NTAPI PhpPluginsCompareFunction(
     _In_ PPH_AVL_LINKS Links1,
@@ -319,67 +306,7 @@ PPH_STRING PhpGetPluginDirectoryPath(
 //    return pluginsDirectory;
 //}
 
-static BOOLEAN EnumPluginsDirectoryCallback(
-    _In_ PFILE_NAMES_INFORMATION Information,
-    _In_opt_ PVOID Context
-    )
-{
-    static PH_STRINGREF PhpPluginExtension = PH_STRINGREF_INIT(L".dll");
-    PH_STRINGREF baseName;
-    PPH_STRING directoryName;
-    PPH_STRING fileName;
 
-    baseName.Buffer = Information->FileName;
-    baseName.Length = Information->FileNameLength;
-
-    // Note: The *.dll pattern passed to NtQueryDirectoryFile includes extensions other than dll (For example: *.dll* or .dllmanifest). (dmex)
-    if (!PhEndsWithStringRef(&baseName, &PhpPluginExtension, FALSE))
-        return TRUE;
-
-    for (ULONG i = 0; i < RTL_NUMBER_OF(PhpDefaultPluginName); i++)
-    {
-        if (PhEqualStringRef(&baseName, &PhpDefaultPluginName[i], TRUE))
-            return TRUE;
-    }
-
-    if (!(directoryName = PhpGetPluginDirectoryPath()))
-        return TRUE;
-
-    fileName = PhConcatStringRef2(&directoryName->sr, &baseName);
-
-    if (!PhIsPluginDisabled(&baseName))
-    {
-        NTSTATUS status;
-
-        status = PhLoadPlugin(fileName);
-
-        if (!NT_SUCCESS(status))
-        {
-            PPH_LIST pluginLoadErrors = Context;
-            PPHP_PLUGIN_LOAD_ERROR loadError;
-            PPH_STRING errorMessage;
-
-            loadError = PhAllocateZero(sizeof(PHP_PLUGIN_LOAD_ERROR));
-            PhSetReference(&loadError->FileName, fileName);
-
-            if (errorMessage = PhGetNtMessage(status))
-            {
-                PhSetReference(&loadError->ErrorMessage, errorMessage);
-                PhDereferenceObject(errorMessage);
-            }
-
-            if (pluginLoadErrors)
-            {
-                PhAddItemList(pluginLoadErrors, loadError);
-            }
-        }
-    }
-
-    PhDereferenceObject(fileName);
-    PhDereferenceObject(directoryName);
-
-    return TRUE;
-}
 
 VOID PhpShowPluginErrorMessage(
     _Inout_ PPH_LIST PluginLoadErrors
@@ -455,154 +382,18 @@ VOID PhpShowPluginErrorMessage(
 /**
  * Loads plugins from the default plugins directory.
  */
-VOID PhLoadPlugins(
-    VOID
-    )
-{
-    NTSTATUS status;
-    PPH_STRING fileName;
-    PPH_STRING baseName;
-    PPH_STRING pluginsDirectory;
-    PPH_LIST pluginLoadErrors;
-
-    if (!(pluginsDirectory = PhpGetPluginDirectoryPath()))
-        return;
-
-    pluginLoadErrors = PhCreateList(1);
-
-    for (ULONG i = 0; i < RTL_NUMBER_OF(PhpDefaultPluginName); i++)
-    {
-        if (fileName = PhConcatStringRef2(&pluginsDirectory->sr, &PhpDefaultPluginName[i]))
-        {
-            baseName = PhGetBaseName(fileName);
-
-            if (PhIsPluginDisabled(&baseName->sr))
-            {
-                PhDereferenceObject(baseName);
-                continue;
-            }
-
-            status = PhLoadPlugin(fileName);
-
-            if (!NT_SUCCESS(status))
-            {
-                PPHP_PLUGIN_LOAD_ERROR loadError;
-                PPH_STRING errorMessage;
-
-                loadError = PhAllocateZero(sizeof(PHP_PLUGIN_LOAD_ERROR));
-                PhSetReference(&loadError->FileName, fileName);
-
-                if (errorMessage = PhGetNtMessage(status))
-                {
-                    PhSetReference(&loadError->ErrorMessage, errorMessage);
-                    PhDereferenceObject(errorMessage);
-                }
-
-                PhAddItemList(pluginLoadErrors, loadError);
-            }
-
-            PhDereferenceObject(baseName);
-            PhDereferenceObject(fileName);
-        }
-    }
-
-    if (!PhGetIntegerSetting(L"EnableSafeDefaultPlugins"))
-    {
-        HANDLE pluginsDirectoryHandle;
-
-        if (NT_SUCCESS(PhCreateFileWin32(
-            &pluginsDirectoryHandle,
-            PhGetString(pluginsDirectory),
-            FILE_LIST_DIRECTORY | SYNCHRONIZE,
-            FILE_ATTRIBUTE_DIRECTORY,
-            FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-            FILE_OPEN,
-            FILE_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT
-            )))
-        {
-            UNICODE_STRING pattern = RTL_CONSTANT_STRING(L"*.dll");
-
-            if (!NT_SUCCESS(PhEnumDirectoryFileEx(
-                pluginsDirectoryHandle,
-                FileNamesInformation,
-                FALSE,
-                &pattern,
-                EnumPluginsDirectoryCallback,
-                pluginLoadErrors
-                )))
-            {
-                // Note: The MUP devices for Virtualbox and VMware improperly truncate
-                // data returned by NtQueryDirectoryFile when ReturnSingleEntry=FALSE and also have
-                // various other bugs and issues for information classes other than FileNamesInformation. (dmex)  
-                PhEnumDirectoryFileEx(
-                    pluginsDirectoryHandle,
-                    FileNamesInformation,
-                    TRUE,
-                    &pattern,
-                    EnumPluginsDirectoryCallback,
-                    pluginLoadErrors
-                    );
-            }
-
-            NtClose(pluginsDirectoryHandle);
-        }
-    }
-
-    // Handle load errors.
-    // In certain startup modes we want to ignore all plugin load errors.
-    if (PhGetIntegerSetting(L"ShowPluginLoadErrors") && pluginLoadErrors->Count != 0 && !PhStartupParameters.PhSvc)
-    {
-        PhpShowPluginErrorMessage(pluginLoadErrors);
-    }
-
-    // When we loaded settings before, we didn't know about plugin settings, so they
-    // went into the ignored settings list. Now that they've had a chance to add
-    // settings, we should scan the ignored settings list and move the settings to
-    // the right places.
-    if (PhSettingsFileName)
-        PhConvertIgnoredSettings();
-
-    PhpExecuteCallbackForAllPlugins(PluginCallbackLoad, TRUE);
-
-    for (ULONG i = 0; i < pluginLoadErrors->Count; i++)
-    {
-        PPHP_PLUGIN_LOAD_ERROR loadError;
-
-        loadError = pluginLoadErrors->Items[i];
-
-        if (loadError->FileName)
-            PhDereferenceObject(loadError->FileName);
-        if (loadError->ErrorMessage)
-            PhDereferenceObject(loadError->ErrorMessage);
-
-        PhFree(loadError);
-    }
-
-    PhDereferenceObject(pluginLoadErrors);
-    PhDereferenceObject(pluginsDirectory);
-}
 
 /**
  * Notifies all plugins that the program is shutting down.
  */
-VOID PhUnloadPlugins(
-    VOID
-    )
-{
-    PhpExecuteCallbackForAllPlugins(PluginCallbackUnload, FALSE);
-}
+
 
 /**
  * Loads a plugin.
  *
  * \param FileName The full file name of the plugin.
  */
-NTSTATUS PhLoadPlugin(
-    _In_ PPH_STRING FileName
-    )
-{
-    return PhLoadPluginImage(FileName, NULL);
-}
+
 
 VOID PhpExecuteCallbackForAllPlugins(
     _In_ PH_PLUGIN_CALLBACK Callback,
