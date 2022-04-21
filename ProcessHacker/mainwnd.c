@@ -498,16 +498,6 @@ VOID PhMwpOnCommand(
             PhInvalidateAllProcessNodes();
         }
         break;
-    case ID_VIEW_HIDEDRIVERSERVICES:
-        {
-            PhMwpToggleDriverServiceTreeFilter();
-        }
-        break;
-    case ID_VIEW_HIDEMICROSOFTSERVICES:
-        {
-            PhMwpToggleMicrosoftServiceTreeFilter();
-        }
-        break;
     case ID_VIEW_HIDEWAITINGCONNECTIONS:
         {
             PhMwpToggleNetworkWaitingConnectionTreeFilter();

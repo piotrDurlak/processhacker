@@ -349,13 +349,7 @@ VOID PhMwpNeedServiceTreeList(
     VOID
     );
 
-VOID PhMwpToggleDriverServiceTreeFilter(
-    VOID
-    );
 
-VOID PhMwpToggleMicrosoftServiceTreeFilter(
-    VOID
-    );
 
 BOOLEAN PhMwpDriverServiceTreeFilter(
     _In_ PPH_TREENEW_NODE Node,

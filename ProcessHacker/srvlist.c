@@ -1004,16 +1004,6 @@ BOOLEAN NTAPI PhpServiceTreeNewCallback(
             SendMessage(PhMainWndHandle, WM_COMMAND, ID_SERVICE_PROPERTIES, 0);
         }
         return TRUE;
-    case TreeNewContextMenu:
-        {
-            PPH_TREENEW_CONTEXT_MENU contextMenu = Parameter1;
-
-            if (!contextMenu)
-                break;
-
-            PhShowServiceContextMenu(contextMenu);
-        }
-        return TRUE;
     }
 
     return FALSE;
