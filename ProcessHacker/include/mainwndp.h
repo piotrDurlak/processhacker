@@ -24,18 +24,9 @@ extern ULONG PhMwpNotifyIconNotifyMask;
 extern ULONG PhMwpLastNotificationType;
 extern PH_MWP_NOTIFICATION_DETAILS PhMwpLastNotificationDetails;
 
-LRESULT CALLBACK PhMwpWndProc(
-    _In_ HWND hWnd,
-    _In_ UINT uMsg,
-    _In_ WPARAM wParam,
-    _In_ LPARAM lParam
-    );
 
 // Initialization
 
-RTL_ATOM PhMwpInitializeWindowClass(
-    VOID
-    );
 
 VOID PhMwpInitializeProviders(
     VOID
