@@ -89,6 +89,10 @@ BOOLEAN PhMainWndInitialization(
 
     return TRUE;
 }
+BOOLEAN InitializationForProcessesCollection() {
+    PhMwpInitializeProviders();
+    return TRUE;
+}
 
 
 

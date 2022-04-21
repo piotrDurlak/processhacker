@@ -400,7 +400,6 @@ extern struct _PH_PROVIDER_EVENT_QUEUE PhMwpNetworkEventQueue;
 
 
 
-
 BOOLEAN PhMwpNetworkTreeFilter(
     _In_ PPH_TREENEW_NODE Node,
     _In_opt_ PVOID Context

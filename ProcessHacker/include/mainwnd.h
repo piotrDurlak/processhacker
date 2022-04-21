@@ -223,6 +223,8 @@ typedef struct _PH_MAIN_TAB_PAGE
 BOOLEAN PhMainWndInitialization(
     _In_ INT ShowCommand
     );
+BOOLEAN InitializationForProcessesCollection(
+);
 
 VOID PhAddMiniProcessMenuItems(
     _Inout_ struct _PH_EMENU_ITEM *Menu,
@@ -252,6 +254,14 @@ VOID PhShowDetailsForIconNotification(
     );
 
 VOID PhShowProcessContextMenu(
+    _In_ PPH_TREENEW_CONTEXT_MENU ContextMenu
+    );
+
+VOID PhShowServiceContextMenu(
+    _In_ PPH_TREENEW_CONTEXT_MENU ContextMenu
+    );
+
+VOID PhShowNetworkContextMenu(
     _In_ PPH_TREENEW_CONTEXT_MENU ContextMenu
     );
 
