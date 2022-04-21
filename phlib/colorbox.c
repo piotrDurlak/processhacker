@@ -50,29 +50,7 @@ LRESULT CALLBACK PhpColorBoxWndProc(
     _In_ LPARAM lParam
     );
 
-BOOLEAN PhColorBoxInitialization(
-    VOID
-    )
-{
-    WNDCLASSEX c = { sizeof(c) };
 
-    c.style = CS_GLOBALCLASS;
-    c.lpfnWndProc = PhpColorBoxWndProc;
-    c.cbClsExtra = 0;
-    c.cbWndExtra = sizeof(PVOID);
-    c.hInstance = PhInstanceHandle;
-    c.hIcon = NULL;
-    c.hCursor = LoadCursor(NULL, IDC_ARROW);
-    c.hbrBackground = NULL;
-    c.lpszMenuName = NULL;
-    c.lpszClassName = PH_COLORBOX_CLASSNAME;
-    c.hIconSm = NULL;
-
-    if (!RegisterClassEx(&c))
-        return FALSE;
-
-    return TRUE;
-}
 
 VOID PhpCreateColorBoxContext(
     _Out_ PPHP_COLORBOX_CONTEXT *Context

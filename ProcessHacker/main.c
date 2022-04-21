@@ -113,15 +113,13 @@ INT WINAPI wWinMain(
     )
 {
     LONG result;
-#ifdef DEBUG
-    PHP_BASE_THREAD_DBG dbg;
-#endif
+//#ifdef DEBUG
+//    PHP_BASE_THREAD_DBG dbg;
+//#endif
 
     if (!NT_SUCCESS(PhInitializePhLibEx(L"Process Hacker", ULONG_MAX, Instance, 0, 0)))
         return 1;
     if (!PhInitializeDirectoryPolicy())
-        return 1;
-    if (!PhInitializeExceptionPolicy())
         return 1;
     if (!PhInitializeNamespacePolicy())
         return 1;
@@ -149,47 +147,15 @@ INT WINAPI wWinMain(
         PhActivatePreviousInstance();
     }
 
-    if (PhGetIntegerSetting(L"EnableStartAsAdmin") &&
-        !PhStartupParameters.NewInstance &&
-        !PhStartupParameters.ShowOptions &&
-        !PhStartupParameters.PhSvc)
-    {
-        if (!PhGetOwnTokenAttributes().Elevated)
-        {
-            AllowSetForegroundWindow(ASFW_ANY);
 
-            if (SUCCEEDED(PhRunAsAdminTask(L"ProcessHackerTaskAdmin")))
-            {
-                PhActivatePreviousInstance();
-                PhExitApplication(STATUS_SUCCESS);
-            }
-        }
-    }
-
-    if (PhGetIntegerSetting(L"EnableKph") &&
-        !PhStartupParameters.NoKph &&
-        !PhIsExecutingInWow64()
-        )
-    {
-       // PhInitializeKph();
-    }
-
-#ifdef DEBUG
-    dbg.ClientId = NtCurrentTeb()->ClientId;
-    dbg.StartAddress = wWinMain;
-    dbg.Parameter = NULL;
-    InsertTailList(&PhDbgThreadListHead, &dbg.ListEntry);
-    TlsSetValue(PhDbgThreadDbgTlsIndex, &dbg);
-#endif
 
     PhInitializeAutoPool(&BaseAutoPool);
 
     PhInitializeCommonControls();
-    PhGuiSupportInitialization();
+    //PhGuiSupportInitialization();
     PhTreeNewInitialization();
     PhGraphControlInitialization();
     PhHexEditInitialization();
-    PhColorBoxInitialization();
 
     PhInitializeAppSystem();
     PhInitializeCallbacks();
@@ -589,203 +555,9 @@ BOOLEAN PhInitializeDirectoryPolicy(
     return TRUE;
 }
 
-#ifndef DEBUG
-#include <symprv.h>
-#include <minidumpapiset.h>
 
-VOID PhpCreateUnhandledExceptionCrashDump(
-    _In_ PEXCEPTION_POINTERS ExceptionInfo,
-    _In_ BOOLEAN MoreInfoDump
-    )
-{
-    static PH_STRINGREF dumpFilePath = PH_STRINGREF_INIT(L"%USERPROFILE%\\Desktop\\");
-    HANDLE fileHandle;
-    PPH_STRING dumpDirectory;
-    PPH_STRING dumpFileName;
-    WCHAR alphastring[16] = L"";
 
-    dumpDirectory = PhExpandEnvironmentStrings(&dumpFilePath);
-    PhGenerateRandomAlphaString(alphastring, RTL_NUMBER_OF(alphastring));
 
-    dumpFileName = PhConcatStrings(
-        4,
-        PhGetString(dumpDirectory),
-        L"\\ProcessHacker_",
-        alphastring,
-        L"_DumpFile.dmp"
-        );
-
-    if (NT_SUCCESS(PhCreateFileWin32(
-        &fileHandle,
-        dumpFileName->Buffer,
-        FILE_GENERIC_WRITE,
-        FILE_ATTRIBUTE_NORMAL,
-        FILE_SHARE_READ | FILE_SHARE_DELETE,
-        FILE_OVERWRITE_IF,
-        FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT
-        )))
-    {
-        MINIDUMP_EXCEPTION_INFORMATION exceptionInfo;
-
-        exceptionInfo.ThreadId = HandleToUlong(NtCurrentThreadId());
-        exceptionInfo.ExceptionPointers = ExceptionInfo;
-        exceptionInfo.ClientPointers = FALSE;
-
-        if (MoreInfoDump)
-        {
-            // Note: This isn't a full dump, still very limited but just enough to see filenames on the stack. (dmex)
-            PhWriteMiniDumpProcess(
-                NtCurrentProcess(),
-                NtCurrentProcessId(),
-                fileHandle,
-                MiniDumpScanMemory | MiniDumpWithIndirectlyReferencedMemory | MiniDumpWithProcessThreadData,
-                &exceptionInfo,
-                NULL,
-                NULL
-                );
-        }
-        else
-        {
-            PhWriteMiniDumpProcess(
-                NtCurrentProcess(),
-                NtCurrentProcessId(),
-                fileHandle,
-                MiniDumpNormal,
-                &exceptionInfo,
-                NULL,
-                NULL
-                );
-        }
-
-        NtClose(fileHandle);
-    }
-
-    PhDereferenceObject(dumpFileName);
-    PhDereferenceObject(dumpDirectory);
-}
-
-ULONG CALLBACK PhpUnhandledExceptionCallback(
-    _In_ PEXCEPTION_POINTERS ExceptionInfo
-    )
-{
-    PPH_STRING errorMessage;
-    INT result;
-    PPH_STRING message;
-
-    if (NT_NTWIN32(ExceptionInfo->ExceptionRecord->ExceptionCode))
-        errorMessage = PhGetStatusMessage(0, WIN32_FROM_NTSTATUS(ExceptionInfo->ExceptionRecord->ExceptionCode));
-    else
-        errorMessage = PhGetStatusMessage(ExceptionInfo->ExceptionRecord->ExceptionCode, 0);
-
-    message = PhFormatString(
-        L"0x%08X (%s)",
-        ExceptionInfo->ExceptionRecord->ExceptionCode,
-        PhGetStringOrEmpty(errorMessage)
-        );
-
-    if (TaskDialogIndirect)
-    {
-        TASKDIALOGCONFIG config = { sizeof(TASKDIALOGCONFIG) };
-        TASKDIALOG_BUTTON buttons[4];
-
-        buttons[0].nButtonID = IDYES;
-        buttons[0].pszButtonText = L"Normaldump";
-        buttons[1].nButtonID = IDNO;
-        buttons[1].pszButtonText = L"Minidump";
-        buttons[2].nButtonID = IDABORT;
-        buttons[2].pszButtonText = L"Restart";
-        buttons[3].nButtonID = IDCANCEL;
-        buttons[3].pszButtonText = L"Exit";
-
-        config.dwFlags = TDF_ALLOW_DIALOG_CANCELLATION;
-        config.pszWindowTitle = PhApplicationName;
-        config.pszMainIcon = TD_ERROR_ICON;
-        config.pszMainInstruction = L"Process Hacker has crashed :(";
-        config.pszContent = PhGetStringOrEmpty(message);
-        config.cButtons = RTL_NUMBER_OF(buttons);
-        config.pButtons = buttons;
-        config.nDefaultButton = IDCANCEL;
-
-        if (SUCCEEDED(TaskDialogIndirect(&config, &result, NULL, NULL)))
-        {
-            switch (result)
-            {
-            case IDCANCEL:
-                {
-                    PhExitApplication(ExceptionInfo->ExceptionRecord->ExceptionCode);
-                }
-                break;
-            case IDABORT:
-                {
-                    PhShellProcessHacker(
-                        NULL,
-                        NULL,
-                        SW_SHOW,
-                        0,
-                        PH_SHELL_APP_PROPAGATE_PARAMETERS | PH_SHELL_APP_PROPAGATE_PARAMETERS_IGNORE_VISIBILITY,
-                        0,
-                        NULL
-                        );
-                }
-                break;
-            case IDYES:
-                PhpCreateUnhandledExceptionCrashDump(ExceptionInfo, TRUE);
-                break;
-            case IDNO:
-                PhpCreateUnhandledExceptionCrashDump(ExceptionInfo, FALSE);
-                break;
-            }
-        }
-    }
-    else
-    {
-        if (PhShowMessage(
-            NULL,
-            MB_YESNO | MB_ICONWARNING | MB_DEFBUTTON2,
-            L"Process Hacker has crashed :(\r\n\r\n%s",
-            L"Do you want to create a minidump on the Desktop?"
-            ) == IDYES)
-        {
-            PhpCreateUnhandledExceptionCrashDump(ExceptionInfo, FALSE);
-        }
-
-        PhShellProcessHacker(
-            NULL,
-            NULL,
-            SW_SHOW,
-            0,
-            PH_SHELL_APP_PROPAGATE_PARAMETERS | PH_SHELL_APP_PROPAGATE_PARAMETERS_IGNORE_VISIBILITY,
-            0,
-            NULL
-            );
-    }
-
-    PhExitApplication(ExceptionInfo->ExceptionRecord->ExceptionCode);
-
-    PhDereferenceObject(message);
-    PhDereferenceObject(errorMessage);
-
-    return EXCEPTION_EXECUTE_HANDLER;
-}
-#endif
-
-BOOLEAN PhInitializeExceptionPolicy(
-    VOID
-    )
-{
-#ifndef DEBUG
-    ULONG errorMode;
-    
-    if (NT_SUCCESS(PhGetProcessErrorMode(NtCurrentProcess(), &errorMode)))
-    {
-        errorMode &= ~(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
-        PhSetProcessErrorMode(NtCurrentProcess(), errorMode);
-    }
-
-    RtlSetUnhandledExceptionFilter(PhpUnhandledExceptionCallback);
-#endif
-    return TRUE;
-}
 
 BOOLEAN PhInitializeNamespacePolicy(
     VOID
