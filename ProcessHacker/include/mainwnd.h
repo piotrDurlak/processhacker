@@ -255,9 +255,4 @@ VOID PhShowProcessContextMenu(
     _In_ PPH_TREENEW_CONTEXT_MENU ContextMenu
     );
 
-
-VOID PhShowNetworkContextMenu(
-    _In_ PPH_TREENEW_CONTEXT_MENU ContextMenu
-    );
-
 #endif

@@ -800,16 +800,6 @@ BOOLEAN NTAPI PhpNetworkTreeNewCallback(
             SendMessage(PhMainWndHandle, WM_COMMAND, ID_NETWORK_GOTOPROCESS, 0);
         }
         return TRUE;
-    case TreeNewContextMenu:
-        {
-            PPH_TREENEW_CONTEXT_MENU contextMenu = Parameter1;
-
-            if (!contextMenu)
-                break;
-
-            PhShowNetworkContextMenu(contextMenu);
-        }
-        return TRUE;
     case TreeNewGetNodeColor:
         {
             PPH_TREENEW_GET_NODE_COLOR getNodeColor = Parameter1;

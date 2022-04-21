@@ -397,20 +397,9 @@ extern PPH_MAIN_TAB_PAGE PhMwpNetworkPage;
 extern HWND PhMwpNetworkTreeNewHandle;
 extern struct _PH_PROVIDER_EVENT_QUEUE PhMwpNetworkEventQueue;
 
-BOOLEAN PhMwpNetworkPageCallback(
-    _In_ struct _PH_MAIN_TAB_PAGE *Page,
-    _In_ PH_MAIN_TAB_PAGE_MESSAGE Message,
-    _In_opt_ PVOID Parameter1,
-    _In_opt_ PVOID Parameter2
-    );
 
-VOID PhMwpNeedNetworkTreeList(
-    VOID
-    );
 
-VOID PhMwpToggleNetworkWaitingConnectionTreeFilter(
-    VOID
-    );
+
 
 BOOLEAN PhMwpNetworkTreeFilter(
     _In_ PPH_TREENEW_NODE Node,

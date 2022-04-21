@@ -176,30 +176,13 @@ VOID PhMwpInitializeControls(
         PhInstanceHandle,
         &treelistCreateParams
         );
-    PhMwpNetworkTreeNewHandle = CreateWindow(
-        PH_TREENEW_CLASSNAME,
-        NULL,
-        WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | TN_STYLE_ICONS | TN_STYLE_DOUBLE_BUFFERED | thinRows | treelistBorder | treelistCustomColors,
-        0,
-        0,
-        3,
-        3,
-        WindowHandle,
-        NULL,
-        PhInstanceHandle,
-        &treelistCreateParams
-        );
+
 
     PageList = PhCreateList(10);
 
     PhMwpCreateInternalPage(L"Processes", 0, PhMwpProcessesPageCallback);
     PhProcessTreeListInitialization();
     PhInitializeProcessTreeList(PhMwpProcessTreeNewHandle);
-
-
-    PhMwpCreateInternalPage(L"Network", 0, PhMwpNetworkPageCallback);
-    PhNetworkTreeListInitialization();
-    PhInitializeNetworkTreeList(PhMwpNetworkTreeNewHandle);
 
     if (PhGetIntegerSetting(L"TreeListCustomRowSize"))
     {
@@ -496,11 +479,6 @@ VOID PhMwpOnCommand(
         {
             PH_SET_INTEGER_CACHED_SETTING(ShowCpuBelow001, !PhCsShowCpuBelow001);
             PhInvalidateAllProcessNodes();
-        }
-        break;
-    case ID_VIEW_HIDEWAITINGCONNECTIONS:
-        {
-            PhMwpToggleNetworkWaitingConnectionTreeFilter();
         }
         break;
     case ID_VIEW_ALWAYSONTOP:
@@ -3188,20 +3166,7 @@ VOID PhMwpInvokeSelectTabPage(
 }
 
 
-VOID PhMwpInvokeSelectNetworkItem(
-    _In_ PPH_NETWORK_ITEM NetworkItem
-    )
-{
-    PPH_NETWORK_NODE networkNode;
 
-    PhMwpNeedNetworkTreeList();
-
-    // For compatibility, LParam is a service item, not node.
-    if (networkNode = PhFindNetworkNode(NetworkItem))
-    {
-        PhSelectAndEnsureVisibleNetworkNode(networkNode);
-    }
-}
 
 BOOLEAN PhMwpPluginNotifyEvent(
     _In_ ULONG Type,
@@ -3311,11 +3276,6 @@ PVOID PhPluginInvokeWindowCallback(
     case PH_MAINWINDOW_CALLBACK_TYPE_SELECT_PROCESS_NODE:
         {
             SendMessage(PhMainWndHandle, WM_PH_INVOKE, (WPARAM)lparam, (LPARAM)PhSelectAndEnsureVisibleProcessNode);
-        }
-        break;
-    case PH_MAINWINDOW_CALLBACK_TYPE_SELECT_NETWORK_ITEM:
-        {
-            SendMessage(PhMainWndHandle, WM_PH_INVOKE, (WPARAM)lparam, (LPARAM)PhMwpInvokeSelectNetworkItem);
         }
         break;
     case PH_MAINWINDOW_CALLBACK_TYPE_UPDATE_FONT:
