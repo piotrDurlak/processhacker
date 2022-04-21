@@ -430,6 +430,7 @@
     <ClCompile Include="phsvc\svcmain.c" />
     <ClCompile Include="plugin.c" />
     <ClCompile Include="plugman.c" />
+    <ClCompile Include="Process.c" />
     <ClCompile Include="procgrp.c" />
     <ClCompile Include="procmtgn.c" />
     <ClCompile Include="procprp.c" />
@@ -512,6 +513,7 @@
     <ClInclude Include="include\phsvcapi.h" />
     <ClInclude Include="include\phappres.h" />
     <ClInclude Include="include\procgrp.h" />
+    <ClInclude Include="Process.h" />
     <ClInclude Include="sdk\phdk.h" />
     <ClInclude Include="include\phplug.h" />
     <ClInclude Include="include\procprpp.h" />

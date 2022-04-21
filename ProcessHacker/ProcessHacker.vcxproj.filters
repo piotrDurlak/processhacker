@@ -312,6 +312,9 @@
     <ClCompile Include="prpgvdm.c">
       <Filter>Process Hacker</Filter>
     </ClCompile>
+    <ClCompile Include="Process.c">
+      <Filter>Process Hacker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hidnproc.h">
@@ -456,6 +459,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="include\notiftoast.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Process.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3873,12 +3873,6 @@ BOOLEAN NTAPI PhpProcessTreeNewCallback(
                 case PHPRTLC_PRIVATEWS:
                     PhpAggregateFieldTotal(node, AggregateTypeIntPtr, AggregateLocationProcessItem, FIELD_OFFSET(PH_PROCESS_ITEM, WorkingSetPrivateSize), &number);
                     break;
-                //case PHPRTLC_SHAREDWS:
-                //    node->WsCounters.NumberOfSharedPages
-                //    break;
-                //case PHPRTLC_SHAREABLEWS:
-                //    node->WsCounters.NumberOfShareablePages
-                //    break;
                 case PHPRTLC_VIRTUALSIZE:
                     PhpAggregateFieldTotal(node, AggregateTypeIntPtr, AggregateLocationProcessItem, FIELD_OFFSET(PH_PROCESS_ITEM, VmCounters.VirtualSize), &number);
                     break;
