@@ -2463,7 +2463,6 @@ PATTRIBUTE_NODE PhpAddAttributeNode(
 
     node = PhAllocate(sizeof(ATTRIBUTE_NODE));
     memset(node, 0, sizeof(ATTRIBUTE_NODE));
-    PhInitializeTreeNewNode(&node->Node);
 
     node->Children = PhCreateList(2);
 

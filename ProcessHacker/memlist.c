@@ -237,7 +237,6 @@ PPH_MEMORY_NODE PhpAddAllocationBaseNode(
 
     memoryNode = PhAllocate(PhEmGetObjectSize(EmMemoryNodeType, sizeof(PH_MEMORY_NODE)));
     memset(memoryNode, 0, sizeof(PH_MEMORY_NODE));
-    PhInitializeTreeNewNode(&memoryNode->Node);
     memoryNode->Node.Expanded = FALSE;
 
     memoryNode->IsAllocationBase = TRUE;
@@ -272,7 +271,6 @@ PPH_MEMORY_NODE PhpAddRegionNode(
 
     memoryNode = PhAllocate(PhEmGetObjectSize(EmMemoryNodeType, sizeof(PH_MEMORY_NODE)));
     memset(memoryNode, 0, sizeof(PH_MEMORY_NODE));
-    PhInitializeTreeNewNode(&memoryNode->Node);
 
     memoryNode->IsAllocationBase = FALSE;
     memoryNode->MemoryItem = MemoryItem;

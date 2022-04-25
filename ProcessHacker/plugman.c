@@ -190,7 +190,6 @@ PPH_PLUGIN_TREE_ROOT_NODE AddPluginsNode(
     pluginNode = PhAllocate(sizeof(PH_PLUGIN_TREE_ROOT_NODE));
     memset(pluginNode, 0, sizeof(PH_PLUGIN_TREE_ROOT_NODE));
 
-    PhInitializeTreeNewNode(&pluginNode->Node);
 
     memset(pluginNode->TextCache, 0, sizeof(PH_STRINGREF) * PH_PLUGIN_TREE_COLUMN_ITEM_MAXIMUM);
     pluginNode->Node.TextCache = pluginNode->TextCache;

@@ -2228,7 +2228,6 @@ PPH_OPTIONS_ADVANCED_ROOT_NODE AddOptionsAdvancedNode(
     node = PhAllocate(sizeof(PH_OPTIONS_ADVANCED_ROOT_NODE));
     memset(node, 0, sizeof(PH_OPTIONS_ADVANCED_ROOT_NODE));
 
-    PhInitializeTreeNewNode(&node->Node);
 
     memset(node->TextCache, 0, sizeof(PH_STRINGREF) * PH_OPTIONS_ADVANCED_COLUMN_ITEM_MAXIMUM);
     node->Node.TextCache = node->TextCache;

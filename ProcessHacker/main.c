@@ -38,6 +38,8 @@
 #include <settings.h>
 #include <srvprv.h>
 
+void wWinMainTest();
+
 LONG PhMainMessageLoop(
     VOID
     );
@@ -113,87 +115,27 @@ INT WINAPI wWinMain(
     )
 {
     LONG result;
-//#ifdef DEBUG
-//    PHP_BASE_THREAD_DBG dbg;
-//#endif
-
-    if (!NT_SUCCESS(PhInitializePhLibEx(L"Process Hacker", ULONG_MAX, Instance, 0, 0)))
-        return 1;
-    if (!PhInitializeDirectoryPolicy())
+    if (!NT_SUCCESS(PhInitializePhLibEx(L"Process", ULONG_MAX, 0, 0)))
         return 1;
     if (!PhInitializeNamespacePolicy())
         return 1;
-    if (!PhInitializeMitigationPolicy())
-        return 1;
-    if (!PhInitializeComPolicy())
-        return 1;
+
 
     PhpProcessStartupParameters();
-    PhpEnablePrivileges();
+    //PhpEnablePrivileges();
 
     if (PhStartupParameters.RunAsServiceMode)
     {
         PhExitApplication(PhRunAsServiceStart(PhStartupParameters.RunAsServiceMode));
     }
-
     PhSettingsInitialization();
     PhpInitializeSettings();
-
-    if (PhGetIntegerSetting(L"AllowOnlyOneInstance") &&
-        !PhStartupParameters.NewInstance &&
-        !PhStartupParameters.ShowOptions &&
-        !PhStartupParameters.PhSvc)
-    {
-        PhActivatePreviousInstance();
-    }
-
-
-
     PhInitializeAutoPool(&BaseAutoPool);
-
     PhInitializeCommonControls();
-    //PhGuiSupportInitialization();
-    PhTreeNewInitialization();
-    PhGraphControlInitialization();
     PhHexEditInitialization();
-
     PhInitializeAppSystem();
     PhInitializeCallbacks();
-    PhEmInitialization();
 
-    if (PhStartupParameters.ShowOptions)
-    {
-        PhShowOptionsDialog(PhStartupParameters.WindowHandle);
-        PhExitApplication(STATUS_SUCCESS);
-    }
-
-
-    PhInitializeMitigationSignaturePolicy();
-
-    if (PhStartupParameters.PhSvc)
-    {
-        MSG message;
-
-        // Turn the feedback cursor off.
-        PostMessage(NULL, WM_NULL, 0, 0);
-        GetMessage(&message, NULL, 0, 0);
-
-        PhExitApplication(PhSvcMain(NULL, NULL));
-    }
-
-#ifndef DEBUG
-    if (PhIsExecutingInWow64())
-    {
-        PhShowWarning(
-            NULL,
-            L"%s",
-            L"You are attempting to run the 32-bit version of Process Hacker on 64-bit Windows. "
-            L"Most features will not work correctly.\n\n"
-            L"Please run the 64-bit version of Process Hacker instead."
-            );
-        PhExitApplication(STATUS_IMAGE_SUBSYSTEM_NOT_PRESENT);
-    }
-#endif
 
     // Set the default priority.
     {
@@ -220,6 +162,56 @@ INT WINAPI wWinMain(
     PhExitApplication(result);
 }
 
+ void wWinMainTest()
+{
+    LONG result;
+    if (!NT_SUCCESS(PhInitializePhLibEx(L"Process", ULONG_MAX, 0, 0)))
+        
+    if (!PhInitializeNamespacePolicy())
+       
+    if (!PhInitializeComPolicy())
+       
+
+    PhpProcessStartupParameters();
+    PhpEnablePrivileges();
+
+    if (PhStartupParameters.RunAsServiceMode)
+    {
+        PhExitApplication(PhRunAsServiceStart(PhStartupParameters.RunAsServiceMode));
+    }
+    PhSettingsInitialization();
+    PhpInitializeSettings();
+    PhInitializeAutoPool(&BaseAutoPool);
+    PhInitializeCommonControls();
+    PhHexEditInitialization();
+    PhInitializeAppSystem();
+    PhInitializeCallbacks();
+
+
+    // Set the default priority.
+    {
+        PROCESS_PRIORITY_CLASS priorityClass;
+
+        priorityClass.Foreground = FALSE;
+        priorityClass.PriorityClass = PROCESS_PRIORITY_CLASS_HIGH;
+
+        if (PhStartupParameters.PriorityClass != 0)
+            priorityClass.PriorityClass = (UCHAR)PhStartupParameters.PriorityClass;
+
+        PhSetProcessPriority(NtCurrentProcess(), priorityClass);
+    }
+
+    if (!InitializationForProcessesCollection())
+    {
+        PhShowError(NULL, L"%s", L"Unable to initialize the main window.");
+        
+    }
+
+    PhDrainAutoPool(&BaseAutoPool);
+
+    result = PhMainMessageLoop();
+    PhExitApplication(result);
+}
 LONG PhMainMessageLoop(
     VOID
     )
@@ -1086,8 +1078,6 @@ BOOLEAN PhInitializeAppSystem(
     if (!PhProcessProviderInitialization())
         return FALSE;
     if (!PhServiceProviderInitialization())
-        return FALSE;
-    if (!PhNetworkProviderInitialization())
         return FALSE;
 
     PhSetHandleClientIdFunction(PhGetClientIdName);

@@ -76,7 +76,6 @@ NTAPI
 PhInitializePhLibEx(
     _In_ PWSTR Name,
     _In_ ULONG Flags,
-    _In_ PVOID ImageBaseAddress,
     _In_opt_ SIZE_T HeapReserveSize,
     _In_opt_ SIZE_T HeapCommitSize
     );

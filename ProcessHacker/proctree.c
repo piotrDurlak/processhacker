@@ -279,7 +279,6 @@ PPH_PROCESS_NODE PhAddProcessNode(
 
     processNode = PhAllocate(PhEmGetObjectSize(EmProcessNodeType, sizeof(PH_PROCESS_NODE)));
     memset(processNode, 0, sizeof(PH_PROCESS_NODE));
-    PhInitializeTreeNewNode(&processNode->Node);
 
     if (PhProcessTreeListStateHighlighting && RunId != 1)
     {

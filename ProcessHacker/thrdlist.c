@@ -255,7 +255,6 @@ PPH_THREAD_NODE PhAddThreadNode(
 
     threadNode = PhAllocate(PhEmGetObjectSize(EmThreadNodeType, sizeof(PH_THREAD_NODE)));
     memset(threadNode, 0, sizeof(PH_THREAD_NODE));
-    PhInitializeTreeNewNode(&threadNode->Node);
 
     if (Context->EnableStateHighlighting && !FirstRun)
     {

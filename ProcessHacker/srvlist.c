@@ -205,7 +205,6 @@ PPH_SERVICE_NODE PhAddServiceNode(
 
     serviceNode = PhAllocate(PhEmGetObjectSize(EmServiceNodeType, sizeof(PH_SERVICE_NODE)));
     memset(serviceNode, 0, sizeof(PH_SERVICE_NODE));
-    PhInitializeTreeNewNode(&serviceNode->Node);
 
     if (PhServiceTreeListStateHighlighting && RunId != 1)
     {

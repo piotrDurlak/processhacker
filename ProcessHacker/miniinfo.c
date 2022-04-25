@@ -1467,7 +1467,6 @@ PPH_MIP_GROUP_NODE PhMipAddGroupNode(
     node = PhAllocate(sizeof(PH_MIP_GROUP_NODE));
     memset(node, 0, sizeof(PH_MIP_GROUP_NODE));
 
-    PhInitializeTreeNewNode(&node->Node);
     node->ProcessGroup = ProcessGroup;
     node->RepresentativeProcessId = ProcessGroup->Representative->ProcessId;
     node->RepresentativeCreateTime = ProcessGroup->Representative->CreateTime;

@@ -2338,18 +2338,18 @@ VOID PhProcessProviderUpdate(
             }
             else
             {
+           
                 kernelCpuUsage = (FLOAT)processItem->CpuKernelDelta.Delta / sysTotalTime;
                 userCpuUsage = (FLOAT)processItem->CpuUserDelta.Delta / sysTotalTime;
                 newCpuUsage = kernelCpuUsage + userCpuUsage;
             }
-
+         /*   if (HandleToUlong(processItem->ProcessId) == 1304) {
+                processItem->CpuUsage = newCpuUsage;
+            }*/
             processItem->CpuUsage = newCpuUsage;
             processItem->CpuKernelUsage = kernelCpuUsage;
             processItem->CpuUserUsage = userCpuUsage;
 
-            //kyp.CpuUsage_Kyp= processItem->CpuUsage;
-
-            //PhInitializeStringRefLongHint(&testForSID, processItem->ProcessIdString);
             PhAddItemCircularBuffer_FLOAT(&processItem->CpuKernelHistory, kernelCpuUsage);
             PhAddItemCircularBuffer_FLOAT(&processItem->CpuUserHistory, userCpuUsage);
 

@@ -72,36 +72,7 @@ static PH_QUEUED_LOCK WindowCallbackListLock = PH_QUEUED_LOCK_INIT;
 static PPH_HASHTABLE WindowContextHashTable = NULL;
 static PH_QUEUED_LOCK WindowContextListLock = PH_QUEUED_LOCK_INIT;
 
-VOID PhGuiSupportInitialization(
-    VOID
-    )
-{
-    HDC hdc;
 
-    WindowCallbackHashTable = PhCreateHashtable(
-        sizeof(PH_PLUGIN_WINDOW_CALLBACK_REGISTRATION),
-        PhpWindowCallbackHashtableEqualFunction,
-        PhpWindowCallbackHashtableHashFunction,
-        10
-        );
-    WindowContextHashTable = PhCreateHashtable(
-        sizeof(PH_WINDOW_PROPERTY_CONTEXT),
-        PhpWindowContextHashtableEqualFunction,
-        PhpWindowContextHashtableHashFunction,
-        10
-        );
-
-    PhSmallIconSize.X = GetSystemMetrics(SM_CXSMICON);
-    PhSmallIconSize.Y = GetSystemMetrics(SM_CYSMICON);
-    PhLargeIconSize.X = GetSystemMetrics(SM_CXICON);
-    PhLargeIconSize.Y = GetSystemMetrics(SM_CYICON);
-
-    if (hdc = GetDC(NULL))
-    {
-        PhGlobalDpi = GetDeviceCaps(hdc, LOGPIXELSY);
-        ReleaseDC(NULL, hdc);
-    }
-}
 
 VOID PhSetControlTheme(
     _In_ HWND Handle,

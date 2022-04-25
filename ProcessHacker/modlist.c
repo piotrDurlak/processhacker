@@ -269,7 +269,6 @@ PPH_MODULE_NODE PhCreateModuleNode(
 
     moduleNode = PhAllocate(PhEmGetObjectSize(EmModuleNodeType, sizeof(PH_MODULE_NODE)));
     memset(moduleNode, 0, sizeof(PH_MODULE_NODE));
-    PhInitializeTreeNewNode(&moduleNode->Node);
 
     moduleNode->Children = PhCreateList(1);
 

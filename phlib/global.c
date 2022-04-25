@@ -57,7 +57,6 @@ NTSTATUS PhInitializePhLib(
     return PhInitializePhLibEx(
         L"Application",
         ULONG_MAX, // all possible features
-        NtCurrentPeb()->ImageBaseAddress,
         0,
         0
         );
@@ -66,13 +65,12 @@ NTSTATUS PhInitializePhLib(
 NTSTATUS PhInitializePhLibEx(
     _In_ PWSTR ApplicationName,
     _In_ ULONG Flags,
-    _In_ PVOID ImageBaseAddress,
     _In_opt_ SIZE_T HeapReserveSize,
     _In_opt_ SIZE_T HeapCommitSize
     )
 {
     PhApplicationName = ApplicationName;
-    PhInstanceHandle = ImageBaseAddress;
+    //PhInstanceHandle = ImageBaseAddress;
 
     PhInitializeWindowsVersion();
     PhInitializeSystemInformation();

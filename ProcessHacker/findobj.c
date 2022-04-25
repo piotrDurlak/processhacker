@@ -257,7 +257,6 @@ PPH_HANDLE_OBJECT_TREE_ROOT_NODE PhpAddHandleObjectNode(
 
     handleObjectNode = PhAllocate(sizeof(PH_HANDLE_OBJECT_TREE_ROOT_NODE));
     memset(handleObjectNode, 0, sizeof(PH_HANDLE_OBJECT_TREE_ROOT_NODE));
-    PhInitializeTreeNewNode(&handleObjectNode->Node);
 
     memset(handleObjectNode->TextCache, 0, sizeof(PH_STRINGREF) * PH_OBJECT_SEARCH_TREE_COLUMN_MAXIMUM);
     handleObjectNode->Node.TextCache = handleObjectNode->TextCache;

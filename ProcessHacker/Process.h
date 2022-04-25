@@ -1,7 +1,7 @@
 #pragma once
 
 
-void ProcessCollectionStart(
+__declspec(dllexport) void wWinMainTest(
 
 );
 

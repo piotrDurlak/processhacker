@@ -215,7 +215,6 @@ PPH_HANDLE_NODE PhAddHandleNode(
 
     handleNode = PhAllocate(PhEmGetObjectSize(EmHandleNodeType, sizeof(PH_HANDLE_NODE)));
     memset(handleNode, 0, sizeof(PH_HANDLE_NODE));
-    PhInitializeTreeNewNode(&handleNode->Node);
 
     if (Context->EnableStateHighlighting && RunId != 1)
     {

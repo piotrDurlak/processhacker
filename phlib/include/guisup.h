@@ -45,10 +45,6 @@ typedef HANDLE HTHEME;
 extern PH_INTEGER_PAIR PhSmallIconSize;
 extern PH_INTEGER_PAIR PhLargeIconSize;
 
-PHLIBAPI
-VOID PhGuiSupportInitialization(
-    VOID
-    );
 
 PHLIBAPI
 VOID PhSetControlTheme(

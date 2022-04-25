@@ -571,20 +571,8 @@ typedef struct _PH_TREENEW_VIEW_PARTS
     LONG NormalWidth;
 } PH_TREENEW_VIEW_PARTS, *PPH_TREENEW_VIEW_PARTS;
 
-PHLIBAPI
-BOOLEAN PhTreeNewInitialization(
-    VOID
-    );
 
-FORCEINLINE VOID PhInitializeTreeNewNode(
-    _In_ PPH_TREENEW_NODE Node
-    )
-{
-    memset(Node, 0, sizeof(PH_TREENEW_NODE));
 
-    Node->Visible = TRUE;
-    Node->Expanded = TRUE;
-}
 
 FORCEINLINE VOID PhInvalidateTreeNewNode(
     _Inout_ PPH_TREENEW_NODE Node,

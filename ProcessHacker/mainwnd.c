@@ -108,18 +108,13 @@ VOID PhMwpInitializeProviders(
     // See PhMwpLoadStage1Worker for more details.
 
     PhInitializeProviderThread(&PhPrimaryProviderThread, PhCsUpdateInterval);
-
     PhInitializeProviderThread(&PhTertiaryProviderThread, PhCsUpdateInterval);
 
     PhRegisterProvider(&PhPrimaryProviderThread, PhProcessProviderUpdate, NULL, &PhMwpProcessProviderRegistration);
 
-
-
     PhSetEnabledProvider(&PhMwpProcessProviderRegistration, TRUE);
 
-
     PhStartProviderThread(&PhPrimaryProviderThread);
-
     PhStartProviderThread(&PhTertiaryProviderThread);
 }
 

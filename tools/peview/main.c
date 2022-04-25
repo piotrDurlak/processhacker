@@ -105,11 +105,9 @@ INT WINAPI wWinMain(
     }
 #endif
 
-    PhGuiSupportInitialization();
     PhSettingsInitialization();
     PeInitializeSettings();
     PvPropInitialization();
-    PhTreeNewInitialization();
 
     if (!NT_SUCCESS(PhGetProcessCommandLine(NtCurrentProcess(), &commandLine)))
         return 1;

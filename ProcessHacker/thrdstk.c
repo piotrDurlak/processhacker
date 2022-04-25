@@ -325,7 +325,6 @@ PPH_STACK_TREE_ROOT_NODE AddThreadStackNode(
     threadStackNode = PhCreateAlloc(sizeof(PH_STACK_TREE_ROOT_NODE));
     memset(threadStackNode, 0, sizeof(PH_STACK_TREE_ROOT_NODE));
 
-    PhInitializeTreeNewNode(&threadStackNode->Node);
 
     memset(threadStackNode->TextCache, 0, sizeof(PH_STRINGREF) * TREE_COLUMN_ITEM_MAXIMUM);
     threadStackNode->Node.TextCache = threadStackNode->TextCache;

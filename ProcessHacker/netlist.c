@@ -204,7 +204,6 @@ PPH_NETWORK_NODE PhAddNetworkNode(
 
     networkNode = PhAllocate(PhEmGetObjectSize(EmNetworkNodeType, sizeof(PH_NETWORK_NODE)));
     memset(networkNode, 0, sizeof(PH_NETWORK_NODE));
-    PhInitializeTreeNewNode(&networkNode->Node);
 
     if (PhNetworkTreeListStateHighlighting && RunId != 1)
     {

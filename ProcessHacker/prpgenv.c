@@ -853,7 +853,6 @@ PPHP_PROCESS_ENVIRONMENT_TREENODE PhpAddEnvironmentNode(
     PPHP_PROCESS_ENVIRONMENT_TREENODE node;
 
     node = PhAllocateZero(sizeof(PHP_PROCESS_ENVIRONMENT_TREENODE));
-    PhInitializeTreeNewNode(&node->Node);
 
     memset(node->TextCache, 0, sizeof(PH_STRINGREF) * ENVIRONMENT_COLUMN_ITEM_MAXIMUM);
     node->Node.TextCache = node->TextCache;

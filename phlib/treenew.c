@@ -55,33 +55,6 @@ static PVOID ComCtl32Handle;
 static LONG SmallIconWidth;
 static LONG SmallIconHeight;
 
-BOOLEAN PhTreeNewInitialization(
-    VOID
-    )
-{
-    WNDCLASSEX c = { sizeof(c) };
-
-    c.style = CS_DBLCLKS | CS_GLOBALCLASS;
-    c.lpfnWndProc = PhTnpWndProc;
-    c.cbClsExtra = 0;
-    c.cbWndExtra = sizeof(PVOID);
-    c.hInstance = PhInstanceHandle;
-    c.hIcon = NULL;
-    c.hCursor = LoadCursor(NULL, IDC_ARROW);
-    c.hbrBackground = NULL;
-    c.lpszMenuName = NULL;
-    c.lpszClassName = PH_TREENEW_CLASSNAME;
-    c.hIconSm = NULL;
-
-    if (!RegisterClassEx(&c))
-        return FALSE;
-
-    ComCtl32Handle = PhGetLoaderEntryDllBase(L"comctl32.dll");
-    SmallIconWidth = PhSmallIconSize.X; //GetSystemMetrics(SM_CXSMICON);
-    SmallIconHeight = PhSmallIconSize.Y; //GetSystemMetrics(SM_CYSMICON);
-
-    return TRUE;
-}
 
 LRESULT CALLBACK PhTnpWndProc(
     _In_ HWND hwnd,
