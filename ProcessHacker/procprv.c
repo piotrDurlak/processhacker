@@ -51,7 +51,7 @@
  * be split into kernel/user components, and cycle time is not available for DPCs and Interrupts
  * separately (only a "system" cycle time).
  */
-
+#include "Process.h"
 #include <phapp.h>
 #include <phsettings.h>
 #include <procprv.h>
@@ -67,6 +67,8 @@
 #include <srvprv.h>
 
 #include <mapimg.h>
+
+
 
 #define PROCESS_ID_BUCKETS 64
 #define PROCESS_ID_TO_BUCKET_INDEX(ProcessId) ((HandleToUlong(ProcessId) / 4) & (PROCESS_ID_BUCKETS - 1))
@@ -1974,31 +1976,6 @@ VOID PhProcessProviderUpdate(
     if (!NT_SUCCESS(PhEnumProcesses(&processes)))
         return;
 
-    // Notes on cycle-based CPU usage:
-    //
-    // Cycle-based CPU usage is a bit tricky to calculate because we cannot get the total number of
-    // cycles consumed by all processes since system startup - we can only get total number of
-    // cycles per process. This means there are two ways to calculate the system-wide cycle time
-    // delta:
-    //
-    // 1. Each update, sum the cycle times of all processes, and calculate the system-wide delta
-    //    from this. Process Explorer seems to do this.
-    // 2. Each update, calculate the cycle time delta for each individual process, and sum these
-    //    deltas to create the system-wide delta. We use this here.
-    //
-    // The first method is simpler but has a problem when a process exits and its cycle time is no
-    // longer counted in the system-wide total. This may cause the delta to be negative and all
-    // other calculations to become invalid. Process Explorer simply ignored this fact and treated
-    // the system-wide delta as unsigned (and therefore huge when negative), leading to all CPU
-    // usages being displayed as "< 0.01".
-    //
-    // The second method is used here, but the adjustments must be done before the main new/modified
-    // pass. We need take into account new, existing and terminated processes.
-
-    // Create the PID hash set. This contains the process information structures returned by
-    // PhEnumProcesses, distinct from the process item hash set. Note that we use the
-    // UniqueProcessKey field as the next node pointer to avoid having to allocate extra memory.
-
     memset(pidBuckets, 0, sizeof(pidBuckets));
 
     process = PH_FIRST_PROCESS(processes);
@@ -2040,10 +2017,6 @@ VOID PhProcessProviderUpdate(
         }
     } while (process = PH_NEXT_PROCESS(process));
 
-    // Add the fake processes to the PID list.
-    //
-    // On Windows 7 the two fake processes are merged into "Interrupts" since we can only get cycle
-    // time information both DPCs and Interrupts combined.
 
     if (PhEnableCycleCpuUsage)
     {
@@ -2124,19 +2097,13 @@ VOID PhProcessProviderUpdate(
                         {
                             if (NT_SUCCESS(PhGetProcessCycleTime(processItem->QueryHandle, &finalCycleTime)))
                             {
-                                // Adjust deltas for the terminated process because this doesn't get
-                                // picked up anywhere else.
-                                //
-                                // Note that if we don't have sufficient access to the process, the
-                                // worst that will happen is that the CPU usages of other processes
-                                // will get inflated. (See above; if we were using the first
-                                // technique, we could get negative deltas, which is much worse.)
+
                                 sysTotalCycleTime += finalCycleTime - processItem->CycleTimeDelta.Value;
                             }
                         }
                     }
 
-                    // If we don't have a valid exit time, use the current time.
+
                     if (exitTime.QuadPart == 0)
                         PhQuerySystemTime(&exitTime);
 
@@ -2181,7 +2148,7 @@ VOID PhProcessProviderUpdate(
 
     // Look for new processes and update existing ones.
     process = PH_FIRST_PROCESS(processes);
-
+    int iter = 0;
     while (process)
     {
         PPH_PROCESS_ITEM processItem;
@@ -2342,6 +2309,9 @@ VOID PhProcessProviderUpdate(
                 kernelCpuUsage = (FLOAT)processItem->CpuKernelDelta.Delta / sysTotalTime;
                 userCpuUsage = (FLOAT)processItem->CpuUserDelta.Delta / sysTotalTime;
                 newCpuUsage = kernelCpuUsage + userCpuUsage;
+                char buf[100];
+                _gcvt(newCpuUsage, 6, buf);
+                printf("PID %d:   cpu usage :  %s\n", HandleToUlong(processItem->ProcessId), buf);
             }
          /*   if (HandleToUlong(processItem->ProcessId) == 1304) {
                 processItem->CpuUsage = newCpuUsage;
@@ -2349,7 +2319,23 @@ VOID PhProcessProviderUpdate(
             processItem->CpuUsage = newCpuUsage;
             processItem->CpuKernelUsage = kernelCpuUsage;
             processItem->CpuUserUsage = userCpuUsage;
+   /*         int PID;
+            char* name;
+            float CPUUsage;
+            float IOUsage;
+            float MemoryUsage;*/
 
+
+            //PDUR Get data for proces;
+            KYP_PROCESS proces = { HandleToUlong(processItem->ProcessId),newCpuUsage*100,(unsigned long)(processItem->IoReadDelta.Delta + processItem->IoWriteDelta.Delta),(unsigned long)(processItem -> PrivateBytesDelta.Value)};
+            if (HandleToUlong(processItem->ProcessId) == 32300) {
+
+
+            printf("test for process iteraction %d \n", iter++);
+            printf("test for process PID %d \n", HandleToUlong(processItem->ProcessId));
+            printf("test for process cpu %f \n", newCpuUsage * 100);
+            printf("test for process memory %d \n", (unsigned long)(processItem->PrivateBytesDelta.Value));
+            }
             PhAddItemCircularBuffer_FLOAT(&processItem->CpuKernelHistory, kernelCpuUsage);
             PhAddItemCircularBuffer_FLOAT(&processItem->CpuUserHistory, userCpuUsage);
 
@@ -2361,6 +2347,7 @@ VOID PhProcessProviderUpdate(
                 {
                     maxCpuValue = newCpuUsage;
                     maxCpuProcessItem = processItem;
+
                 }
 
                 // I/O for Other is not included because it is too generic.
@@ -2368,12 +2355,7 @@ VOID PhProcessProviderUpdate(
                 {
                     maxIoValue = processItem->IoReadDelta.Delta + processItem->IoWriteDelta.Delta;
                     maxIoProcessItem = processItem;
-                    //kyp.IOTotal_Kyp = maxIoValue;
-                    //kyp.Sid_Kyp = HandleToUlong(processItem->ProcessId);
-                    //kyp.processName_Kyp;
-                    //VmCounters
-                    //kyp.Memory_Kyp = HandleToUlong(processItem->VmCounters.PagefileUsage); ;
-                    //kyp.processName_Kyp =HandleToUlong(ProcessItem->ProcessId)
+
                 }
             }
 
@@ -2603,11 +2585,10 @@ VOID PhProcessProviderUpdate(
                 PhInvokeCallback(PhGetGeneralCallback(GeneralCallbackProcessProviderModifiedEvent), processItem);
             }
 
-            // No reference added by PhpLookupProcessItem.
+
         }
 
-        // Trick ourselves into thinking that the fake processes
-        // are on the list.
+
         if (process == PhInterruptsProcessInformation)
         {
             process = NULL;
@@ -2698,10 +2679,7 @@ VOID PhProcessProviderUpdate(
 
 }
 
-//VOID kypTest() {
-//    PH_PROCESS_ITEM_KYP kyp;
-//
-//}
+
 
 PPH_PROCESS_RECORD PhpCreateProcessRecord(
     _In_ PPH_PROCESS_ITEM ProcessItem

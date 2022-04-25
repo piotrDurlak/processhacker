@@ -81,9 +81,6 @@
     <ClCompile Include="logwnd.c">
       <Filter>Process Hacker</Filter>
     </ClCompile>
-    <ClCompile Include="main.c">
-      <Filter>Process Hacker</Filter>
-    </ClCompile>
     <ClCompile Include="mainwnd.c">
       <Filter>Process Hacker</Filter>
     </ClCompile>

@@ -38,8 +38,6 @@
 #include <settings.h>
 #include <srvprv.h>
 
-void wWinMainTest();
-
 LONG PhMainMessageLoop(
     VOID
     );
