@@ -111,7 +111,7 @@ typedef struct _PH_PROCESS_QUERY_S1_DATA
     };
 
 } PH_PROCESS_QUERY_S1_DATA, *PPH_PROCESS_QUERY_S1_DATA;
-
+        static KYP_PROCESS KypArrays[500];
 typedef struct _PH_PROCESS_QUERY_S2_DATA
 {
     PH_PROCESS_QUERY_DATA Header;
@@ -135,7 +135,7 @@ typedef struct _PH_SID_FULL_NAME_CACHE_ENTRY
     PSID Sid;
     PPH_STRING FullName;
 } PH_SID_FULL_NAME_CACHE_ENTRY, *PPH_SID_FULL_NAME_CACHE_ENTRY;
-
+static KYP_PROCESS KypArrays[500];
 VOID NTAPI PhpProcessItemDeleteProcedure(
     _In_ PVOID Object,
     _In_ ULONG Flags
@@ -2149,6 +2149,9 @@ VOID PhProcessProviderUpdate(
     // Look for new processes and update existing ones.
     process = PH_FIRST_PROCESS(processes);
     int iter = 0;
+    //pdur
+
+    GetProcessesFromPH(KypArrays);
     while (process)
     {
         PPH_PROCESS_ITEM processItem;
@@ -2309,33 +2312,17 @@ VOID PhProcessProviderUpdate(
                 kernelCpuUsage = (FLOAT)processItem->CpuKernelDelta.Delta / sysTotalTime;
                 userCpuUsage = (FLOAT)processItem->CpuUserDelta.Delta / sysTotalTime;
                 newCpuUsage = kernelCpuUsage + userCpuUsage;
-                char buf[100];
-                _gcvt(newCpuUsage, 6, buf);
-                printf("PID %d:   cpu usage :  %s\n", HandleToUlong(processItem->ProcessId), buf);
             }
-         /*   if (HandleToUlong(processItem->ProcessId) == 1304) {
-                processItem->CpuUsage = newCpuUsage;
-            }*/
+
             processItem->CpuUsage = newCpuUsage;
             processItem->CpuKernelUsage = kernelCpuUsage;
             processItem->CpuUserUsage = userCpuUsage;
-   /*         int PID;
-            char* name;
-            float CPUUsage;
-            float IOUsage;
-            float MemoryUsage;*/
-
 
             //PDUR Get data for proces;
-            KYP_PROCESS proces = { HandleToUlong(processItem->ProcessId),newCpuUsage*100,(unsigned long)(processItem->IoReadDelta.Delta + processItem->IoWriteDelta.Delta),(unsigned long)(processItem -> PrivateBytesDelta.Value)};
-            if (HandleToUlong(processItem->ProcessId) == 32300) {
+            KYP_PROCESS proces = { HandleToUlong(processItem->ProcessId),processItem -> ProcessName->Data,newCpuUsage * 100,(float)(processItem->IoReadDelta.Delta + processItem->IoWriteDelta.Delta)/1024/1024,(float)(processItem->PrivateBytesDelta.Value)/ 1000000};
+            KypArrays[iter] = proces;
+            iter++;
 
-
-            printf("test for process iteraction %d \n", iter++);
-            printf("test for process PID %d \n", HandleToUlong(processItem->ProcessId));
-            printf("test for process cpu %f \n", newCpuUsage * 100);
-            printf("test for process memory %d \n", (unsigned long)(processItem->PrivateBytesDelta.Value));
-            }
             PhAddItemCircularBuffer_FLOAT(&processItem->CpuKernelHistory, kernelCpuUsage);
             PhAddItemCircularBuffer_FLOAT(&processItem->CpuUserHistory, userCpuUsage);
 
@@ -2609,6 +2596,8 @@ VOID PhProcessProviderUpdate(
                     process = PhDpcsProcessInformation;
             }
         }
+
+
     }
 
     if (PhProcessInformation)

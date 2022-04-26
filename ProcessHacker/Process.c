@@ -83,22 +83,45 @@ static PPH_LIST DialogList = NULL;
 static PPH_LIST FilterList = NULL;
 static int counter = 0;
 static PH_AUTO_POOL BaseAutoPool;
-//KYP_PROCESS data;
-//__declspec(dllexport) KYP_PROCESS DisplayHelloFromDLL()
-//{
-//     KYP_PROCESS person ={ 123,"hello from dll name",1.0f,3.33f,100};
-//
-//
-//
-//
-//
-//    //printf("Hello from DLL %s!\n", person.name);
-//    return person;
-//}
-void testDisplay(c) {
-    counter = c;
-    printf("Hello from DLL display %d!\n", c);
+KYP_PROCESS data[500];
+KYP_PROCESS *dataPtr;
+__declspec(dllexport) KYP_PROCESS* GetProcesses()
+{
+    if (dataPtr != NULL) {
+        //printf("dataPtr is null so prepare another tab");
+        KYP_PROCESS *resultData = data;
+        for (int i = 0; i < 500; i++) {
+            resultData[i] = data[i];
+        }
+        dataPtr = NULL;
+        return resultData;
     }
+    dataPtr = NULL;
+    return NULL;
+
+}
+
+void GetProcessesFromPH(KYP_PROCESS* processes) {
+    int process = 0;
+    if (counter == 5) {
+
+        printf("counter");
+        if (dataPtr == NULL) {
+            for (int i = 0; i < 500; i++) {
+                data[i] = processes[i];
+                printf("PID : %d", processes[i].PID);
+                process++;
+            }
+            dataPtr = data;
+            printf("number of p");
+            printf("%d", process);
+        }
+    }
+    else {
+        counter++;
+    }
+
+}
 __declspec(dllexport) int InitProcess(
 
 )

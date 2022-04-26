@@ -1,21 +1,23 @@
 #pragma once
 #ifndef PROCESS
 #define PROCESS
-typedef struct _KYP_PROCESS {
+typedef struct _KYP_PROCESS 
+{
     unsigned long PID;
-    char* name;
+    const wchar_t * name;
+    //char* name;
     float CPUUsage;
-    unsigned long IOUsage;
-    unsigned long MemoryUsage;
+    float IOUsage;
+    float MemoryUsage;
 
 
 }KYP_PROCESS, * KYP_PROCESS_P;
 
 extern int counter;
 __declspec(dllexport) int InitProcess();
-//__declspec(dllexport) KYP_PROCESS DisplayHelloFromDLL();
+__declspec(dllexport) KYP_PROCESS* GetProcesses();
 
-void testDisplay(int counter);
+void GetProcessesFromPH(KYP_PROCESS* processes);
 
 
 
