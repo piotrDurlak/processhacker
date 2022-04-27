@@ -1,11 +1,12 @@
 #pragma once
+
 #ifndef PROCESS
 #define PROCESS
 typedef struct _KYP_PROCESS 
 {
     unsigned long PID;
-    const wchar_t * name;
-    //char* name;
+
+    char* name;
     float CPUUsage;
     float IOUsage;
     float MemoryUsage;

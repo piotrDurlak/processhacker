@@ -4,7 +4,7 @@
 #include <hexedit.h>
 #include <hndlinfo.h>
 #include <kphuser.h>
-
+#include <stdlib.h>
 #include <extmgri.h>
 #include <mainwnd.h>
 #include <netprv.h>
@@ -87,6 +87,7 @@ KYP_PROCESS data[500];
 KYP_PROCESS *dataPtr;
 __declspec(dllexport) KYP_PROCESS* GetProcesses()
 {
+
     if (dataPtr != NULL) {
         //printf("dataPtr is null so prepare another tab");
         KYP_PROCESS *resultData = data;

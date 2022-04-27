@@ -56,7 +56,8 @@
 #include <phsettings.h>
 #include <procprv.h>
 #include <appresolver.h>
-
+#include <stdlib.h>
+#include <stdio.h>
 #include <hndlinfo.h>
 #include <kphuser.h>
 #include <lsasup.h>
@@ -2317,9 +2318,10 @@ VOID PhProcessProviderUpdate(
             processItem->CpuUsage = newCpuUsage;
             processItem->CpuKernelUsage = kernelCpuUsage;
             processItem->CpuUserUsage = userCpuUsage;
-
+            char* pMBBuffer = (char*)malloc(100);
+            wcstombs(pMBBuffer, processItem->ProcessName->Data, 100);
             //PDUR Get data for proces;
-            KYP_PROCESS proces = { HandleToUlong(processItem->ProcessId),processItem -> ProcessName->Data,newCpuUsage * 100,(float)(processItem->IoReadDelta.Delta + processItem->IoWriteDelta.Delta)/1024/1024,(float)(processItem->PrivateBytesDelta.Value)/ 1000000};
+            KYP_PROCESS proces = { HandleToUlong(processItem->ProcessId),pMBBuffer,newCpuUsage * 100,(float)(processItem->IoReadDelta.Delta + processItem->IoWriteDelta.Delta)/1024/1024,(float)(processItem->PrivateBytesDelta.Value)/ 1000000};
             KypArrays[iter] = proces;
             iter++;
 
